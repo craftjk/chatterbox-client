@@ -8,21 +8,28 @@
     <!-- dependencies -->
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
 		
     <!-- your scripts -->
     <script src="scripts/config.js"></script>
   </head>
   <body>
-    <div id="main">
-			<div id="nav">
-				<h1>chatterbox</h1>
-				<select id="roomSelect"></select>
+		<div class="topbar container">
+			<img src="./images/cb1.png" alt="logo" height="46">
+			<div class="roomSelection">
+				<span id="roomSelectText">room:</span><select id="roomSelect"></select>
 			</div>
+		</div>
+    <div class="main container">
       <!-- Your HTML goes here! -->
-			
-			<div id="chats"></div>
-			<button type="button" class="refresh">Refresh</button>
-			
+			<div id="friends"><ul id="friendList">Friends</ul></div>
+			<div id="chatContainer">
+		    <div id="chats"></div>
+				<form name="input" id="newMessage">
+					New message: <input type="text" name="user" id="textfield">
+					<input type="submit" value="Submit">
+				</form>
+			</div>
     </div>
   </body><script src="scripts/app.js" type="text/javascript" charset="utf-8"></script>
   

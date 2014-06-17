@@ -1,51 +1,64 @@
 body {
     background: #eee;
-    text-align: center;
     padding: 0 25px;
     font-family: arial, sans-serif;
 }
+.topbar {
+	background: rgb(74, 134, 232); 
+	height:46px;
+	position: fixed;
+	float: left;
+	top:0;
+	right:0;
+	left:0;
+	z-index:1000;
+	border-bottom: 1px solid rgba(0,0,0,0.5);
+}
 
-#main {
-    width: 500px;
-    margin: auto;
-    text-align: left;
-    background: white;
-    padding: 50px 60px;
+.roomSelection {
+	float: right;
+}
+
+.main {
+    width: 800px;
+		float: left;
+    margin: 50px 0 0 20px; /* top right bottom left */
+    background: #999;
+    padding: 0;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
 }
 
-#main h1 {
-    margin-top: 0;
-    font-size: 35px;
-    margin-bottom: 5px;
-    padding: 5px;
-		display: inline;
+div .chatContainer {
+	float: left;
+	width: 350px;
+  min-height: 450px;
+	
 }
 
-#main select {
-	float: right;
+div #friends {
+  float: left;
+	width: 200px;
+  background: #666;
+  border: 1px solid white;
+  min-height: 450px;
+  color: white;
 }
 
-#main h1 span {
-    font-style:italic;
-}
-
-#main ul {
+.main ul {
     padding-left: 20px;
 }
-
-#main .error {
+.main .error {
     border: 1px solid red;
     background: #FDEFF0;
     padding: 20px;
 }
 
-#main .success {
+.main .success {
     margin-top: 25px;
 }
 
-#main .success code {
+.main .success code {
     font-size: 12px;
     color: green;
     line-height: 13px;

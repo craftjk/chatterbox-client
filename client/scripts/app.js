@@ -30,24 +30,36 @@ app.fetch = function() {
 	$.ajax({
 	  url: app.server,
 	  type: 'GET',
+		data: 'order=-createdAt',
 		success: function(data) {
+			app.clearMessages();
 			app.displayMessages(data);
 		}
 	});
 };
 
 app.displayMessages = function(data) {
-		// for (var i = 0; i < app.numDisplayedMessages; i++) {
-	for (var i = data.results.length-1; i > data.results.length - 1 - app.numDisplayedMessages; i--) {
+	for (var i = 0; i < app.numDisplayedMessages; i++) {
+	// for (var i = data.results.length-1; i > data.results.length - 1 - app.numDisplayedMessages; i--) {
 		var messageObj = data.results[i];
+
+		app.addRoom(messageObj.roomname);
 		var $message = $('<div class="message"></div>');
 		var $username = $('<span class="username"></span>');
+		var date = new Date(Date.parse(messageObj.createdAt));
+		$message.append(moment(date).format('h:mm:ss'));
+		$message.append(' ')
 		$username.text(messageObj.username);
+		$username.append()
 		$message.append($username);
-		$message.append(': ');
+		$message.append('=> ');
 		$message.append(encodeURI(messageObj.text));
 		$('#chats').append($message);
 	}
+	
+	$('span').click(function() {
+		app.addFriend(this);
+	});
 };
 
 app.addMessage = function (message) {
@@ -69,16 +81,31 @@ app.addRoom = function(room) {
 	}
 };
 
-$('.refresh').click(function() {
-	app.clearMessages();
-	app.fetch();
+$('#newMessage').submit(function() {
+	console.log(this)
 });
 
 app.clearMessages = function() {
 	$('#chats').html('');
 };
 
+app.addFriend = function (obj) {
+	// app.friends.push();
+	$('#friendList').append('<li>' + obj.innerHTML + '</li>');
+	console.log($('ul.friendList'))
+	console.log(('<li>' + obj.innerHTML + '</li>'))
+};
 
+setTimeout(function(){
+	$('span').click(function() {
+		alert("username clicked");
+		app.addFriend(this);
+	});
+}.bind(this), 500);
 
 // call app.init right here?
 app.init();
+
+// setInterval(function() {
+// 	app.fetch();
+// }, 1000);
