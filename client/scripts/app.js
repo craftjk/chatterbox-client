@@ -3,6 +3,7 @@
 var app = {
 	server: 'https://api.parse.com/1/classes/chatterbox',
 	numDisplayedMessages: 15,
+	rooms: [],
 };
 
 app.init = function() {
@@ -61,7 +62,11 @@ app.addMessage = function (message) {
 };
 
 app.addRoom = function(room) {
-	
+	if (app.rooms.indexOf(room) === -1) {
+		app.rooms.push(room);
+		$('#roomSelect').append($("<option></option>")
+										.text(room));
+	}
 };
 
 $('.refresh').click(function() {

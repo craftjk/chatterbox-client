@@ -20,6 +20,11 @@ body {
     font-size: 35px;
     margin-bottom: 5px;
     padding: 5px;
+		display: inline;
+}
+
+#main select {
+	float: right;
 }
 
 #main h1 span {
