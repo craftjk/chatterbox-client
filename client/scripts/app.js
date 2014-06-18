@@ -3,10 +3,15 @@
 var app = {
 	server: 'https://api.parse.com/1/classes/chatterbox',
 	numDisplayedMessages: 15,
+	currentroom: 'lobby',
 	rooms: [],
 };
 
 app.init = function() {
+  console.log('running chatterbox');
+  // Get username
+  app.username = window.location.search.substr(10);
+	
 	app.fetch();
 };
 
@@ -53,7 +58,7 @@ app.displayMessages = function(data) {
 		$username.append()
 		$message.append($username);
 		$message.append('=> ');
-		$message.append(encodeURI(messageObj.text));
+		$message.append(messageObj.text);
 		$('#chats').append($message);
 	}
 	
@@ -64,13 +69,13 @@ app.displayMessages = function(data) {
 
 app.addMessage = function (message) {
 	app.send(message);
-	var $message = $('<div class="message"></div>');
-	var $username = $('<span class="username"></span>');
-	$username.text(message.username);
-	$message.append($username);
-	$message.append(': ');
-	$message.append(encodeURI(message.text));
-	$('#chats').append($message);
+	// var $message = $('<div class="message"></div>');
+	// var $username = $('<span class="username"></span>');
+	// $username.text(message.username);
+	// $message.append($username);
+	// $message.append(': ');
+	// $message.append(message.text);
+	// $('#chats').append($message);
 };
 
 app.addRoom = function(room) {
@@ -81,8 +86,18 @@ app.addRoom = function(room) {
 	}
 };
 
-$('#newMessage').submit(function() {
-	console.log(this)
+$('#newMessage').submit(function(e) {
+	e.preventDefault();
+	var msg = {
+		username: app.username,
+		text: this.message.value,
+		roomname: app.currentroom
+	}
+	app.send(msg);
+});
+
+$('#roomSelect').change(function(e) {
+	// app.currentroom = this.value;
 });
 
 app.clearMessages = function() {
@@ -103,9 +118,108 @@ setTimeout(function(){
 	});
 }.bind(this), 500);
 
-// call app.init right here?
-app.init();
+setInterval(function() {
+	app.fetch();
+}, 1000);
 
-// setInterval(function() {
-// 	app.fetch();
-// }, 1000);
+
+// lecture solution
+/*
+app = {
+
+    server: 'https://api.parse.com/1/classes/chatterbox/',
+
+    init: function() {
+      console.log('running chatterbox');
+      // Get username
+      app.username = window.location.search.substr(10);
+
+      // cache some dom references
+      app.$text = $('#message');
+
+      app.loadAllMessages();
+
+      $('#send').on('submit', app.handleSubmit);
+    },
+
+    loadAllMessages: function(){
+      app.loadMsgs();
+      setTimeout( app.loadAllMessages, 5000 );
+    },
+
+    handleSubmit: function(e){
+      e.preventDefault();
+
+      var message = {
+        username: app.username,
+        text: app.$text.val()
+      };
+      app.$text.val('');
+
+      app.sendMsg(message);
+    },
+
+    renderMessage: function(message){
+      var $user = $("<div>", {class: 'user'}).text(message.username);
+      var $text = $("<div>", {class: 'text'}).text(message.text);
+      var $message = $("<div>", {class: 'chat', 'data-id': message.objectId }).append($user, $text);
+      return $message;
+    },
+
+    addToDom: function(message){
+      if( $('#chats').find('.message[data-id='+message.objectId+']').length === 0 ){
+        var $html = app.renderMessage(message);
+        $('#chats').prepend($html);
+      }
+    },
+
+    processMessages: function(messages){
+      for( var i = messages.length; i > 0; i-- ){
+        app.addToDom(messages[i-1]);
+      }
+    },
+
+    loadMsgs: function(){
+      $.ajax({
+        url: app.server,
+        data: { order: '-createdAt'},
+        contentType: 'application/json',
+        success: function(json){
+          // console.log(json.results);
+          app.processMessages(json.results);
+        },
+        complete: function(){
+          app.stopSpinner();
+        }
+      });
+    },
+
+    sendMsg: function(message){
+      app.startSpinner();
+      $.ajax({
+        type: 'POST',
+        url: app.server,
+        data: JSON.stringify(message),
+        contentType: 'application/json',
+        success: function(json){
+          // console.log(json);
+          message.objectId = json.objectId;
+          app.addToDom(message);
+        },
+        complete: function(){
+          app.stopSpinner();
+        }
+      });
+    },
+
+    startSpinner: function(){
+      $('.spinner img').show();
+      $('form input[type=submit]').attr('disabled', "true");
+    },
+
+    stopSpinner: function(){
+      $('.spinner img').fadeOut('fast');
+      $('form input[type=submit]').attr('disabled', null);
+    }
+};
+*/
